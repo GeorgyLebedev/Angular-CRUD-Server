@@ -4,6 +4,8 @@ import { UpdateClientDto } from './dto/update-client.dto';
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {Client} from "./entities/client.entity";
+import {iCondition}  from "../../interfaces/iCondition";
+import {findAllWithConditions} from "../../services/QueryHelper";
 
 @Injectable()
 export class ClientService {
@@ -25,8 +27,8 @@ export class ClientService {
       this.clientRepository.metadata.columns.map((column) => column.databaseName)
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} client`;
+  async findWithCondition(params:iCondition) {
+    return await findAllWithConditions(this.clientRepository, params)
   }
 
   async update(id: number, updateClientDto: UpdateClientDto) {

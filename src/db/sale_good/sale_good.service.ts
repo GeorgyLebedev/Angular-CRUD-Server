@@ -4,6 +4,8 @@ import { UpdateSaleGoodDto } from './dto/update-sale_good.dto';
 import {InjectRepository} from "@nestjs/typeorm";
 import {SaleGood} from "../sale_good/entities/sale_good.entity";
 import {Repository} from "typeorm";
+import {iCondition}  from "../../interfaces/iCondition";
+import {findAllWithConditions} from "../../services/QueryHelper";
 
 @Injectable()
 export class SaleGoodService {
@@ -26,8 +28,8 @@ export class SaleGoodService {
   }
 
 
-  findOne(id: number) {
-    return `This action returns a #${id} saleGood`;
+  async findWithCondition(params: iCondition) {
+    return await findAllWithConditions(this.saleGoodRepository, params)
   }
 
   async update(id: number, updateSaleGoodDto: UpdateSaleGoodDto) {

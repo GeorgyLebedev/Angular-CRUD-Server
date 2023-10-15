@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { CreateRequestDto } from './dto/create-request.dto';
 import { UpdateRequestDto } from './dto/update-request.dto';
 import {InjectRepository} from "@nestjs/typeorm";
-import {Order} from "../order/entities/order.entity";
 import {Repository} from "typeorm";
 import {Request} from "./entities/request.entity";
+import {iCondition} from "../../interfaces/iCondition";
+import {findAllWithConditions} from "../../services/QueryHelper";
 
 @Injectable()
 export class RequestService {
@@ -26,8 +27,8 @@ export class RequestService {
       this.requestRepository.metadata.columns.map((column) => column.databaseName)
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} request`;
+  async findWithCondition(params: iCondition) {
+    return await findAllWithConditions(this.requestRepository, params)
   }
 
   async update(id: number, updateRequestDto: UpdateRequestDto) {

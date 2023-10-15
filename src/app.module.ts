@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import {AuthModule} from "./auth/auth.module";
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientModule } from './db/client/client.module';
@@ -34,6 +35,7 @@ import { EmployeeModule } from './db/employee/employee.module';
       }),
       inject: [ConfigService],
     }),
+    AuthModule,
     ClientModule,
     ManufacturerModule,
     GoodModule,

@@ -4,6 +4,8 @@ import { UpdateBranchDto } from './dto/update-branch.dto';
 import {InjectRepository} from "@nestjs/typeorm";
 import {Repository} from "typeorm";
 import {Branch} from "./entities/branch.entity";
+import {findAllWithConditions} from "../../services/QueryHelper";
+import {iCondition}  from "../../interfaces/iCondition";
 
 @Injectable()
 export class BranchService {
@@ -25,8 +27,8 @@ export class BranchService {
       this.branchRepository.metadata.columns.map((column) => column.databaseName)
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} branch`;
+  async findWithCondition(params:iCondition) {
+    return await findAllWithConditions(this.branchRepository, params)
   }
 
   async update(id: number, updateBranchDto: UpdateBranchDto) {

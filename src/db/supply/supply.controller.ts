@@ -1,4 +1,4 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe} from '@nestjs/common';
+import {Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, Query} from '@nestjs/common';
 import { SupplyService } from './supply.service';
 import { CreateSupplyDto } from './dto/create-supply.dto';
 import { UpdateSupplyDto } from './dto/update-supply.dto';
@@ -14,13 +14,11 @@ export class SupplyController {
   }
 
   @Get()
-  findAll() {
-    return this.supplyService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.supplyService.findOne(+id);
+  findAll(@Query() query: any) {
+    if (Object.keys(query).length > 0)
+      return this.supplyService.findWithCondition(query)
+    else
+      return this.supplyService.findAll();
   }
 
   @Patch(':id')

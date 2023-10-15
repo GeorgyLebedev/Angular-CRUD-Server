@@ -5,6 +5,8 @@ import {InjectRepository} from "@nestjs/typeorm";
 
 import {Repository} from "typeorm";
 import {Supply} from "./entities/supply.entity";
+import {iCondition}  from "../../interfaces/iCondition";
+import {findAllWithConditions} from "../../services/QueryHelper";
 
 @Injectable()
 export class SupplyService {
@@ -26,8 +28,8 @@ export class SupplyService {
       this.supplyRepository.metadata.columns.map((column) => column.databaseName)
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} supply`;
+  async findWithCondition(params: iCondition) {
+    return await findAllWithConditions(this.supplyRepository, params)
   }
 
   async update(id: number, updateSupplyDto: UpdateSupplyDto) {

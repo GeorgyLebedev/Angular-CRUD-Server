@@ -1,11 +1,12 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe} from '@nestjs/common';
-import { BranchService } from './branch.service';
-import { CreateBranchDto } from './dto/create-branch.dto';
-import { UpdateBranchDto } from './dto/update-branch.dto';
+import {Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, Query} from '@nestjs/common';
+import {BranchService} from './branch.service';
+import {CreateBranchDto} from './dto/create-branch.dto';
+import {UpdateBranchDto} from './dto/update-branch.dto';
 
 @Controller('branch')
 export class BranchController {
-  constructor(private readonly branchService: BranchService) {}
+  constructor(private readonly branchService: BranchService) {
+  }
 
   @Post()
   @UsePipes(new ValidationPipe())
@@ -14,13 +15,11 @@ export class BranchController {
   }
 
   @Get()
-  findAll() {
-    return this.branchService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.branchService.findOne(+id);
+  findAll(@Query() query: any) {
+    if (Object.keys(query).length > 0)
+      return this.branchService.findWithCondition(query)
+    else
+      return this.branchService.findAll();
   }
 
   @Patch(':id')

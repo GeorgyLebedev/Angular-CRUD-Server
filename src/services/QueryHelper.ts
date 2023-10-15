@@ -13,51 +13,55 @@ import {
 import {iCondition} from "../interfaces/iCondition";
 
 export const findAllWithConditions = async (repository: Repository<any>, params: iCondition) => {
+  let result
+  params.inverse = (params.inverse.toString() === 'true')
   switch (params.condition) {
     case 'equal':
-      return params.inverse ?
-        await repository.find({[params.column]: params.value}) :
-        await repository.find({[params.column]: Not(params.value)})
+      result = params.inverse ?
+        await repository.find({where: {[params.column]: Not(params.value)}}) :
+        await repository.find({where: {[params.column]: params.value}})
       break
     case 'more':
-      return params.inverse ?
-        await repository.find({[params.column]: MoreThan(params.value)}) :
-        await repository.find({[params.column]: Not(MoreThan(params.value))})
+      result = params.inverse ?
+        await repository.find({where: {[params.column]: Not(MoreThan(params.value))}}) :
+        await repository.find({where: {[params.column]: MoreThan(params.value)}})
       break
     case 'moreEqual':
-      return params.inverse ?
-        await repository.find({[params.column]: MoreThanOrEqual(params.value)}) :
-        await repository.find({[params.column]: Not(MoreThanOrEqual(params.value))})
+      result = params.inverse ?
+        await repository.find({where: {[params.column]: Not(MoreThanOrEqual(params.value))}}) :
+        await repository.find({where: {[params.column]: MoreThanOrEqual(params.value)}})
       break
     case 'less':
-      return params.inverse ?
-        await repository.find({[params.column]: LessThan(params.value)}) :
-        await repository.find({[params.column]: Not(LessThan(params.value))})
+      result = params.inverse ?
+        await repository.find({where: {[params.column]: Not(LessThan(params.value))}}) :
+        await repository.find({where: {[params.column]: LessThan(params.value)}})
       break
     case 'lessEqual':
-      return params.inverse ?
-        await repository.find({[params.column]: LessThanOrEqual(params.value)}) :
-        await repository.find({[params.column]: Not(LessThanOrEqual(params.value))})
+      result = params.inverse ?
+        await repository.find({where: {[params.column]: Not(LessThanOrEqual(params.value))}}) :
+        await repository.find({where: {[params.column]: LessThanOrEqual(params.value)}})
       break
     case 'in':
-      return params.inverse ?
-        await repository.find({[params.column]: In(params.value)}) :
-        await repository.find({[params.column]: Not(In(params.value))})
+      result = params.inverse ?
+        await repository.find({where: {[params.column]: Not(In(params.value))}}) :
+        await repository.find({where: {[params.column]: In(params.value)}})
       break
-/*    case 'between':
-      return params.inverse ?
-        await repository.find({[params.column]: Between(params.value)}) :
-        await repository.find({[params.column]: Not(Between(params.value))})
-      break*/
+    case 'between':
+      result = params.inverse ?
+        await repository.find({where: {[params.column]: Not(Between(params.valueArray.toString().split(',')[0], params.valueArray.toString().split(',')[1]))}}) :
+        await repository.find({where: {[params.column]: Between(params.valueArray.toString().split(',')[0], params.valueArray.toString().split(',')[1])}})
+      break
     case 'like':
-      return params.inverse ?
-        await repository.find({[params.column]: Like(params.value)}) :
-        await repository.find({[params.column]: Not(Like(params.value))})
+      result = params.inverse ?
+        await repository.find({where: {[params.column]: Not(Like(params.value))}}) :
+        await repository.find({where: {[params.column]: Like(params.value)}})
       break
-    case 'isNotEmpty':
-      return params.inverse ?
-        await repository.find({[params.column]: IsNull()}) :
-        await repository.find({[params.column]: Not(IsNull())})
+    case 'isEmpty':
+      result = params.inverse ?
+        await repository.find({where: {[params.column]: Not(IsNull())}}) :
+        await repository.find({where: {[params.column]: IsNull()}})
       break
   }
+
+  return result
 }

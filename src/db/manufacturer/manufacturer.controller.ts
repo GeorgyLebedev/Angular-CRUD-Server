@@ -1,4 +1,4 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe} from '@nestjs/common';
+import {Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, Query} from '@nestjs/common';
 import { ManufacturerService } from './manufacturer.service';
 import { CreateManufacturerDto } from './dto/create-manufacturer.dto';
 import { UpdateManufacturerDto } from './dto/update-manufacturer.dto';
@@ -14,14 +14,15 @@ export class ManufacturerController {
   }
 
   @Get()
-  findAll() {
-    return this.manufacturerService.findAll();
+  findAll(@Query() query: any) {
+    if (Object.keys(query).length > 0)
+      return this.manufacturerService.findWithCondition(query)
+    else
+      return this.manufacturerService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.manufacturerService.findOne(+id);
-  }
+
+
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateManufacturerDto: UpdateManufacturerDto) {

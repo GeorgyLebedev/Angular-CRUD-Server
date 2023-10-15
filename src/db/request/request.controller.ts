@@ -1,4 +1,4 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe} from '@nestjs/common';
+import {Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, Query} from '@nestjs/common';
 import { RequestService } from './request.service';
 import { CreateRequestDto } from './dto/create-request.dto';
 import { UpdateRequestDto } from './dto/update-request.dto';
@@ -14,13 +14,11 @@ export class RequestController {
   }
 
   @Get()
-  findAll() {
-    return this.requestService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.requestService.findOne(+id);
+  findAll(@Query() query: any) {
+    if (Object.keys(query).length > 0)
+      return this.requestService.findWithCondition(query)
+    else
+      return this.requestService.findAll();
   }
 
   @Patch(':id')

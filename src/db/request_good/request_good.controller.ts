@@ -1,4 +1,4 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe} from '@nestjs/common';
+import {Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, Query} from '@nestjs/common';
 import { RequestGoodService } from './request_good.service';
 import { CreateRequestGoodDto } from './dto/create-request_good.dto';
 import { UpdateRequestGoodDto } from './dto/update-request_good.dto';
@@ -14,14 +14,13 @@ export class RequestGoodController {
   }
 
   @Get()
-  findAll() {
-    return this.requestGoodService.findAll();
+  findAll(@Query() query: any) {
+    if (Object.keys(query).length > 0)
+      return this.requestGoodService.findWithCondition(query)
+    else
+      return this.requestGoodService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.requestGoodService.findOne(+id);
-  }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateRequestGoodDto: UpdateRequestGoodDto) {

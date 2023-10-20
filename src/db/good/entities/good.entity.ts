@@ -45,6 +45,9 @@ export class Good {
   @Column()
   description!: string;
 
+  @Column({nullable:true, default:null})
+  quantity:number
+
   @Column({ type: 'decimal', precision: 14, scale: 2 })
   price!: string;
 

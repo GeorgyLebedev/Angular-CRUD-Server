@@ -2,7 +2,7 @@ import {EmployeeService} from "../db/employee/employee.service";
 import * as argon2 from 'argon2'
 import {Injectable, UnauthorizedException} from "@nestjs/common";
 import {JwtService} from "@nestjs/jwt";
-import {IEmployee} from "../types/types";
+import {IEmployee} from "../interfaces/iEmployee";
 @Injectable()
 export class AuthService{
   constructor(private readonly employeeService: EmployeeService, private readonly jwtService:JwtService) {}
@@ -20,7 +20,7 @@ export class AuthService{
   async login(employee: IEmployee) {
     const {code, login}=employee
     return {
-      code, login, token: this.jwtService.sign( { code: code, login: login }),
+      code, login, token: this.jwtService.sign( { code: code, login: login }, {expiresIn: '15m'}),
     };
   }
 }

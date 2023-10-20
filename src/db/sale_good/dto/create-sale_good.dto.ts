@@ -1,12 +1,13 @@
-import {IsNumber} from "class-validator";
+import {IsNotEmpty, Min} from "class-validator";
 
 export class CreateSaleGoodDto {
-  @IsNumber({},{message: 'Некорректное поле: saleCode!'})
+  @IsNotEmpty({message: 'Некорректное поле: saleCode!'})
   saleCode:number
 
-  @IsNumber({},{message: 'Некорректное поле: goodCode!'})
+  @IsNotEmpty({message: 'Некорректное поле: goodCode!'})
   goodCode:number
 
-  @IsNumber({},{message: 'Некорректное поле: quantity!'})
+  @IsNotEmpty({message: 'Некорректное поле: quantity!'})
+  @Min(1, {message: 'Поле: quantity - значение не может быть меньше 1!'})
   quantity:number
 }

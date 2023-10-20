@@ -1,5 +1,5 @@
 import {Manufacturer} from "../../manufacturer/entities/manufacturer.entity";
-import {IsOptional, IsString} from "class-validator";
+import {IsNumber, IsOptional, IsString} from "class-validator";
 
 export class CreateGoodDto {
   manufacturer!: Manufacturer
@@ -9,6 +9,10 @@ export class CreateGoodDto {
 
   @IsString({message: 'Некорректное поле: description!'})
   description!: string
+
+  @IsOptional()
+  @IsNumber({},{message: 'Некорректное поле: quantity!'})
+  quantity:number
 
   @IsString({message: 'Некорректное поле: price!'})
   price!:string

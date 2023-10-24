@@ -50,6 +50,6 @@ export class Employee {
   @Column({default: false})
   isAdmin!: boolean;
 
-  @CreateDateColumn()
+  @CreateDateColumn({type:"timestamp without time zone"})
   registrationDate!: Date;
 }
